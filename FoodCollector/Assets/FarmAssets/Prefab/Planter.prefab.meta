@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 11b69c36267b24828820939be87a57b7
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 235885
+  packageName: Farm Assets
+  packageVersion: 1.0
+  assetPath: Assets/FarmAssets/Prefab/Planter.prefab
+  uploadId: 540130
