@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: bbd34543fa7d74e6ba795fba12301c8a
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 235885
+  packageName: Farm Assets
+  packageVersion: 1.0
+  assetPath: Assets/FarmAssets/Prefab/WaterTank.prefab
+  uploadId: 540130

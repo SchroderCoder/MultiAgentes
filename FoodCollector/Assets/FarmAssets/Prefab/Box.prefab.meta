@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 274a08b0fb1e3462f9dbeecb8912da8b
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 235885
+  packageName: Farm Assets
+  packageVersion: 1.0
+  assetPath: Assets/FarmAssets/Prefab/Box.prefab
+  uploadId: 540130

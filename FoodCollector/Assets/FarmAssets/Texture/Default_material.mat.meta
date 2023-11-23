@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 76199cedb9a4743518891a83e33e5e23
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 235885
+  packageName: Farm Assets
+  packageVersion: 1.0
+  assetPath: Assets/FarmAssets/Texture/Default_material.mat
+  uploadId: 540130
