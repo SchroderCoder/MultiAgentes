@@ -15,6 +15,7 @@ class Server(BaseHTTPRequestHandler):
         
     def do_GET(self):
         self._set_response()
+        
         self.wfile.write("GET request for {}".format(self.path).encode('utf-8'))
 
     def do_POST(self):
