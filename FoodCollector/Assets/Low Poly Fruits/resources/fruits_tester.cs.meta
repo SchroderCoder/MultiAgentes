@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 0911ba2dbeb8dcd4dbbc405b122347da
+timeCreated: 1502953916
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 98135
+  packageName: Low Poly Fruit Pickups
+  packageVersion: 1.0
+  assetPath: Assets/Low Poly Fruits/resources/fruits_tester.cs
+  uploadId: 196237

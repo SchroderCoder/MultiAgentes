@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2c27805f4aa51294d8e890faff82a7db
+timeCreated: 1498531054
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 94533
+  packageName: 'Farm Machinery: Low Poly Tractor and Planter'
+  packageVersion: 1.0
+  assetPath: Assets/tractor and planter/prefabs/tractor.prefab
+  uploadId: 187848
