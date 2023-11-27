@@ -1,5 +1,7 @@
-"""# Carlos Adrián García Estrada
-# Matricula: A01707503
+"""
+# Carlos Adrián García Estrada A01707503
+# Iván Ricardo Paredes Avilez A01705083
+# Francisco Couttolenc Ortíz A01754959
 # Fecha de entrega: 19 de noviembre de 2023
 
 #  Situación: 
@@ -12,7 +14,8 @@
 
 # Como eficientar el algoritmo 
 
-    Implementar otro array que contenga todas las coordenadas de la celda y que el agente en caso de que ninguna de las condiciones previamente explicadas, en vez de moverse aleatoriamente se mueva a alguna coordenada que aún no haya sido visitada o poco visitada.   """
+    Implementar otro array que contenga todas las coordenadas de la celda y que el agente en caso de que ninguna de las condiciones previamente explicadas, en vez de moverse aleatoriamente se mueva a alguna coordenada que aún no haya sido visitada o poco visitada.   
+"""
 
 # Importamos las clases que se requieren para manejar los agentes (Agent) y su entorno (Model).
 # Cada modelo puede contener múltiples agentes.
