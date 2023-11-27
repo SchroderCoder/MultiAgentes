@@ -388,5 +388,5 @@ while model.running:
 
 # Imprimimos el tiempo que le tomó correr al modelo.
 print('Numero de pasos:', step_counter)
-print('Tiempo de ejecución:', str(datetime.timedelta(seconds=(time.time() - start_time))))
+print('Tiempo de ejecucion:', str(datetime.timedelta(seconds=(time.time() - start_time))))
 
