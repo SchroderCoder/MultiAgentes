@@ -1,17 +1,11 @@
-﻿// TC2008B Modelación de Sistemas Multiagentes con gráficas computacionales
-// C# client to interact with Python server via POST
-// Sergio Ruiz-Loza, Ph.D. March 2021
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
 public class WebClient : MonoBehaviour
 {
-    // IEnumerator - yield return
-    IEnumerator SendData(string data)
+    IEnumerator GetData(string data)
     {
         WWWForm form = new WWWForm();
         form.AddField("bundle", "the data");
@@ -21,40 +15,61 @@ public class WebClient : MonoBehaviour
             byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(data);
             www.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
             www.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
-            //www.SetRequestHeader("Content-Type", "text/html");
             www.SetRequestHeader("Content-Type", "application/json");
 
-            yield return www.SendWebRequest();          // Talk to Python
-            if(www.isNetworkError || www.isHttpError)
+            yield return www.SendWebRequest();
+
+            if (www.isNetworkError || www.isHttpError)
             {
                 Debug.Log(www.error);
             }
             else
             {
-                Debug.Log(www.downloadHandler.text);    // Answer from Python
-                Vector3 tPos = JsonUtility.FromJson<Vector3>(www.downloadHandler.text.Replace('\'', '\"'));
-                //Debug.Log("Form upload complete!");
-                Debug.Log(tPos);
+                Debug.Log(www.downloadHandler.text);
+                ProcessData(www.downloadHandler.text);
             }
         }
-
     }
 
+    void ProcessData(string jsonData)
+    {
+        // Deserialize the JSON data into custom classes or structures
+        SimulationData simulationData = JsonUtility.FromJson<SimulationData>(jsonData);
 
-    // Start is called before the first frame update
+        // Access agent, food, deposit, and step data
+        List<AgentData> agentDataList = simulationData.agent_positions;
+        List<FoodData> foodDataList = simulationData.food_positions;
+        DepositData depositData = simulationData.deposit_position;
+        StepData stepData = simulationData.step_data;
+
+        // Process and update Unity scene based on the received data
+        UpdateAgentObjects(agentDataList);
+        UpdateFoodObjects(foodDataList);
+        UpdateDepositObject(depositData);
+
+        // Access and use the number of steps
+        Debug.Log("Number of Steps: " + stepData.num_steps);
+
+        // Additional processing if needed
+    }
+
+    void UpdateAgentObjects(List<AgentData> agentDataList)
+    {
+        // Update Unity objects representing agents based on agentDataList
+    }
+
+    void UpdateFoodObjects(List<FoodData> foodDataList)
+    {
+        // Update Unity objects representing food based on foodDataList
+    }
+
+    void UpdateDepositObject(DepositData depositData)
+    {
+        // Update Unity object representing the deposit based on depositData
+    }
+
     void Start()
     {
-        //string call = "What's up?";
-        Vector3 fakePos = new Vector3(3.44f, 0, -15.707f);
-        string json = EditorJsonUtility.ToJson(fakePos);
-        //StartCoroutine(SendData(call));
-        StartCoroutine(SendData(json));
-        // transform.localPosition
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        StartCoroutine(GetData(""));
     }
 }
