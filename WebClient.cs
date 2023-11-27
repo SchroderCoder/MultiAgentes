@@ -21,7 +21,7 @@ public class WebClient : MonoBehaviour
 
             if (www.isNetworkError || www.isHttpError)
             {
-                Debug.Log(www.error);
+                Debug.Log("Error:" + www.error);
             }
             else
             {
@@ -70,6 +70,6 @@ public class WebClient : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(GetData(""));
+        StartCoroutine(GetData("http://127.0.0.1:5000"));
     }
 }
