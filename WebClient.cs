@@ -37,21 +37,22 @@ public class WebClient : MonoBehaviour
         SimulationData simulationData = JsonUtility.FromJson<SimulationData>(jsonData);
 
         // Access agent, food, deposit, and step data
-        List<AgentData> agentDataList = simulationData.agent_positions;
+        List<AgentData> agentDataList = simulationData.agent_data;
         List<FoodData> foodDataList = simulationData.food_positions;
         DepositData depositData = simulationData.deposit_position;
-        StepData stepData = simulationData.step_data;
+        int numSteps = simulationData.step_data.num_steps;  // Access step data correctly
 
-        // Process and update Unity scene based on the received data
-        UpdateAgentObjects(agentDataList);
-        UpdateFoodObjects(foodDataList);
-        UpdateDepositObject(depositData);
+        // Update Unity scene based on the received data
+        UpdateAgents(agentDataList);
+        UpdateFood(foodDataList);
+        UpdateDeposit(depositData);
 
         // Access and use the number of steps
-        Debug.Log("Number of Steps: " + stepData.num_steps);
+        Debug.Log("Number of Steps: " + numSteps);
 
         // Additional processing if needed
     }
+
 
     void UpdateAgentObjects(List<AgentData> agentDataList)
     {

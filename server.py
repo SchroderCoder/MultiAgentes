@@ -1,11 +1,10 @@
 from flask import Flask, jsonify, request
-
 from main import FoodModel, FoodAgent
 
 app = Flask(__name__)
 
 model = FoodModel(20, 20, 5, 47)
-current_step = 0
+current_step = 1
 all_steps_data = []  # Accumulate data for all steps
 
 class AgentData:
@@ -14,28 +13,24 @@ class AgentData:
         self.position = position
         self.has_food = has_food
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET"])
 def handle_request():
     global current_step, all_steps_data
 
     if request.method == "GET":
-        return jsonify({"message": "Use POST request to simulate steps."})
-    
-    elif request.method == "POST":
-        while current_step < 805:
+        if current_step <= 570:
             model.step()
             data = extract_model_data(model)
-            all_steps_data.append(data)
             current_step += 1
-
-        # Simulation completed, send all data
-        return jsonify({"all_steps_data": all_steps_data, "message": "Simulation completed"})
+            return jsonify(data)
+        else:
+            return jsonify({"num_steps": current_step, "message": "No more steps available or simulation completed"})
 
 def extract_model_data(model):
     agent_data_list = [AgentData(agent.unique_id, (agent.pos[0], agent.pos[1]), agent.has_food) for agent in model.schedule.agents]
     food_positions = [(x, y) for x in range(model.grid.width) for y in range(model.grid.height) if model.get_type(x, y) == 1]
-    deposit_position = model.get_deposit_coordinates() if model.get_deposit_coordinates() is not None else (None, None)
-    num_steps = model.step_call_count
+    deposit_position = 13,0
+    num_steps = current_step  # Update num_steps to use the current_step variable
 
     return {
         "agent_data": [{"id": agent_data.agent_id, "position": agent_data.position, "has_food": agent_data.has_food} for agent_data in agent_data_list],

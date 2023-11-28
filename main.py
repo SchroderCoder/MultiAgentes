@@ -265,7 +265,7 @@ class FoodModel(Model):
         for i in range(num_agents):
             x, y = self.random.randrange(self.grid.width), self.random.randrange(self.grid.height)
 
-            while not (self.grid.is_cell_empty((x, y))):
+            while not (self.get_type(x, y) == 0 and self.grid.is_cell_empty((x, y))):
                  x, y = self.random.randrange(self.grid.width), self.random.randrange(self.grid.height)    
             
             fooder = FoodAgent(id, self)
