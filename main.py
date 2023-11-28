@@ -60,10 +60,10 @@ import math
 class FoodAgent(Agent):
     def __init__(self, id, model):
         super().__init__(id, model)
+        self.random.seed(12345)
         self.has_food = False
         self.deposit_coordinates = None # Inicialmente no se conocen las coordenadas del depósito
         self.food_coordinates = None  # Coordenadas para dirigirse a comida
-        self.random.seed(12345)
 #el método step del agente, se utiliza esta función para intentar obtener las coordenadas de la comida. 
 #Si el agente no tiene comida, intentará moverse hacia la comida si hay coordenadas disponibles.
 
@@ -83,6 +83,8 @@ class FoodAgent(Agent):
     
          # Se filtra la celda de depósito
         deposit_cell = [cell for cell in neighborhood if (self.model.grid.is_cell_empty(cell) and self.model.get_type(cell[0], cell[1]) == 2)] 
+
+        random_empty_cell = random.choice(empty_cells)
 
         # Actualiza las coordenadas del deposito en el modelo en caso de que esté en su vecindario
         if deposit_cell:            
@@ -104,13 +106,14 @@ class FoodAgent(Agent):
 
             #calcula aquellas posiciones de comida a las que puede ir 
             food_moves = self.model.get_food_coordinates(self.pos[0], self.pos[1])
+
             # Si la celda actual tiene comida y no es un depósito, recoge la comida                 
             if self.model.get_type(self.pos[0], self.pos[1]) == 1:
                 self.model.take_food(self.pos[0], self.pos[1])
                 self.has_food = True
 
                 # Si hay coordenadas del depósito, muévete hacia el depósito
-                if self.deposit_coordinates is not None:
+                if self.deposit_coordinates:
                     self.move_to_deposit(empty_cells)
 
                 else:
@@ -215,6 +218,7 @@ class FoodAgent(Agent):
                 self.model.grid.move_agent(self, new_position)
             else:
                 self.model.grid.move_agent(self, self.random.choice(empty_cells))
+
 #En get_grid obtenemos los contenidos de nuestra celda y seteamos valores numéricos
 #para después setear los colores en el grid
 
@@ -262,29 +266,24 @@ class FoodModel(Model):
 
         id = 0
 
-        #Iniciamos variables en cero
-        for x in range(width):
-            for y in range(height):
-                self.type[x][y] = 0
-
-        #Ponemos agentes en random
-        for i in range(num_agents):
-            x, y = self.random.randrange(self.grid.width), self.random.randrange(self.grid.height)
-
-            while not (self.grid.is_cell_empty((x, y))):
-                 x, y = self.random.randrange(self.grid.width), self.random.randrange(self.grid.height)    
-            
-            fooder = FoodAgent(id, self)
-            self.grid.place_agent(fooder, (x, y))
-            self.schedule.add(fooder)
-            id = id + 1
-
         #Ponemos coordenadas del deposito random
         x, y = self.random.randrange(self.grid.width), self.random.randrange(self.grid.height)
         while not (self.grid.is_cell_empty((x, y))):
                  x, y = self.random.randrange(self.grid.width), self.random.randrange(self.grid.height)
         if (self.grid.is_cell_empty((x, y))):
                 self.type[x][y] = 2
+
+        #Ponemos agentes en random
+        for i in range(num_agents):
+            x, y = self.random.randrange(self.grid.width), self.random.randrange(self.grid.height)
+
+            while not (self.get_type(x, y) == 0 and self.grid.is_cell_empty((x, y))):
+                 x, y = self.random.randrange(self.grid.width), self.random.randrange(self.grid.height)    
+            
+            fooder = FoodAgent(id, self)
+            self.grid.place_agent(fooder, (x, y))
+            self.schedule.add(fooder)
+            id = id + 1
 
     def step(self):
 
