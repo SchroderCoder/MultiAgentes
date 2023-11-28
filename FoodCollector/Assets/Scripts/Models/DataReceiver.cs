@@ -97,6 +97,30 @@ public class DataReceiver : MonoBehaviour
         SimulationData data = JsonUtility.FromJson<SimulationData>(jsonData);
         Debug.Log("Received JSON: " + jsonData);
 
+        foreach (var agentData in data.agent_data)
+        {
+            int agentID = agentData.id;
+            Vector2 newPosition = new Vector2(agentData.position[0], agentData.position[1]);
+            bool hasFood = agentData.has_food;
+
+            GameObject agentObject = agentObjects.Find(agent => agent.GetComponent<AgentController>().id == agentID);
+
+            if (agentObject != null)
+            {
+                // Update the agent position and properties
+                AgentController agentController = agentObject.GetComponent<AgentController>();
+                agentController.id = agentID; // Ensure the ID is set (this might not be necessary if it doesn't change)
+                agentController.Move(newPosition);
+            }
+            else
+            {
+                // Instantiate new agent if not found
+                GameObject newAgent = Instantiate(agentPrefab, new Vector3(newPosition.x, 0, newPosition.y), Quaternion.identity);
+                AgentController newAgentController = newAgent.GetComponent<AgentController>();
+                newAgentController.id = agentID;
+                agentObjects.Add(newAgent);
+            }
+        }
        /* foreach (var agentData in data.agent_data)
         {   
 
