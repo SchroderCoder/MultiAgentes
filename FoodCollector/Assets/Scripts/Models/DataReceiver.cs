@@ -7,32 +7,57 @@ using System.Collections.Generic;
 public class AgentData
 {
     public int id;
-    public PositionData position;
+    public int[] position;
     public bool has_food;
 }
 
 [System.Serializable]
-public class PositionData
+public class FoodData
 {
-    public float x;
-    public float y;
+    public int[] position;
 }
 
 [System.Serializable]
 public class SimulationData
 {
     public List<AgentData> agent_data;
-    // Add other data as needed
+    public List<FoodData> food;
+    public int[] deposit_position;
 }
 
 public class DataReceiver : MonoBehaviour
 {
-    public string serverUrl = "http://127.0.0.1:8585"; // Update this with your server URL
-    public GameObject agentPrefab;   // Assign your agent prefab in the Unity Editor
+    public string serverUrl = "http://127.0.0.1:8585"; 
+    public GameObject agentPrefab;   
+    public GameObject foodPrefab;
+    public GameObject depositPrefab;
+
+    private bool depositCreated = false;
+
+    // Diccionario para mantener las instancias de comida
+    public Dictionary<Vector2Int, GameObject> foodInstances;
+
+    // Singleton de APIRequest
+    public static DataReceiver Instance { get; private set; }
 
     private List<GameObject> agentObjects = new List<GameObject>(); // List to store spawned agent objects
     private bool shouldFetchData = true; // Flag to control when to fetch new data
     private int fetchCounter = 0; // Counter to limit the number of calls
+
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            foodInstances = new Dictionary<Vector2Int, GameObject>();
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
@@ -82,43 +107,47 @@ public class DataReceiver : MonoBehaviour
             StartCoroutine(GetDataFromServer());
         }
     }
+        StartCoroutine(GetDataFromServer());
+    }
+
 
     IEnumerator GetDataFromServer()
     {
-        shouldFetchData = false; // Set the flag to false while fetching data
 
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(serverUrl))
-        {
-            yield return webRequest.SendWebRequest();
+        while(true) {
 
-            if (webRequest.result != UnityWebRequest.Result.Success)
+            using (UnityWebRequest webRequest = UnityWebRequest.Get(serverUrl))
             {
-                Debug.LogError("Error: " + webRequest.error);
+                yield return webRequest.SendWebRequest();
+
+                if (webRequest.result != UnityWebRequest.Result.Success)
+                {
+                    Debug.LogError("Error: " + webRequest.error);
+                }
+                else
+                {
+                    // Parse updated JSON data
+                    string json = webRequest.downloadHandler.text;
+                    Debug.Log(json);
+                    UpdateObjects(json);
+                }
             }
-            else
-            {
-                // Parse updated JSON data
-                string json = webRequest.downloadHandler.text;
-                UpdateAgents(json);
-            }
+            yield return new WaitForSeconds(0.3f);
+
         }
 
-        shouldFetchData = true; // Set the flag back to true after fetching data
-        fetchCounter++;
     }
 
-    void UpdateAgents(string jsonData)
+    void UpdateObjects(string jsonData)
     {
         SimulationData data = JsonUtility.FromJson<SimulationData>(jsonData);
+        Debug.Log("Received JSON: " + jsonData);
 
-
-        foreach (AgentData agentData in data.agent_data)
+       /* foreach (var agentData in data.agent_data)
         {   
-            Debug.Log(agentData.position.x);
-            Debug.Log(agentData.position.y);
 
             int agentID = agentData.id;
-            Vector3 newPosition = new Vector3(agentData.position.x, agentData.position.y, 0f); // Set z-coordinate to 0
+            Vector2 newPosition = new Vector2(agentData.position.x, agentData.position.y); // Set z-coordinate to 0
             bool hasFood = agentData.has_food;
 
             GameObject agentObject = agentObjects.Find(agent => agent.GetComponent<AgentScript>().AgentID == agentID);
@@ -133,6 +162,21 @@ public class DataReceiver : MonoBehaviour
             {
                 Debug.LogError("Agent object not found for ID: " + agentID);
             }
+        }*/
+   
+
+        if (!depositCreated)  {
+                InstantiateDeposit(data.deposit_position);
+                depositCreated = true;
         }
+
+
+
+
+    }
+    void InstantiateDeposit(int[] depositPosition)
+    {
+        Vector3 position3D = new Vector3(depositPosition[0], 0, depositPosition[1]);
+        Instantiate(depositPrefab, position3D, Quaternion.identity);
     }
 }
