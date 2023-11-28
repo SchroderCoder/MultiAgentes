@@ -28,8 +28,8 @@ def handle_request():
 
 def extract_model_data(model):
     agent_data_list = [AgentData(agent.unique_id, (agent.pos[0], agent.pos[1]), agent.has_food) for agent in model.schedule.agents]
-    food_positions = [(x, y) for x in range(model.grid.width) for y in range(model.grid.height) if model.get_type(x, y) == 1]
-    deposit_position = 13,0
+    food_positions = [{"position": (x, y)} for x in range(model.grid.width) for y in range(model.grid.height) if model.get_type(x, y) == 1]
+    deposit_position = (13, 0)
     num_steps = current_step  # Update num_steps to use the current_step variable
 
     return {

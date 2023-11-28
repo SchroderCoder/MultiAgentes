@@ -21,7 +21,7 @@ public class FoodData
 public class SimulationData
 {
     public List<AgentData> agent_data;
-    public List<FoodData> food;
+    public List<FoodData> food_positions;
     public int[] deposit_position;
 }
 
@@ -34,22 +34,23 @@ public class DataReceiver : MonoBehaviour
 
     private bool depositCreated = false;
 
-    // Diccionario para mantener las instancias de comida
+    // Dictionary to keep track of food instances
     public Dictionary<Vector2Int, GameObject> foodInstances;
 
-    // Singleton de APIRequest
+    // Singleton of APIRequest
     public static DataReceiver Instance { get; private set; }
 
     private List<GameObject> agentObjects = new List<GameObject>(); // List to store spawned agent objects
+    private List<GameObject> foodObjects; // List to store spawned food objects
     private bool shouldFetchData = true; // Flag to control when to fetch new data
     private int fetchCounter = 0; // Counter to limit the number of calls
-
 
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
+            foodObjects = new List<GameObject>(); // Initialize the foodObjects list
             foodInstances = new Dictionary<Vector2Int, GameObject>();
             DontDestroyOnLoad(gameObject);
         }
@@ -61,15 +62,14 @@ public class DataReceiver : MonoBehaviour
 
     void Start()
     {
+        foodObjects = new List<GameObject>(); // Initialize the foodObjects list
         StartCoroutine(GetDataFromServer());
     }
 
-
     IEnumerator GetDataFromServer()
     {
-
-        while(true) {
-
+        while(true)
+        {
             using (UnityWebRequest webRequest = UnityWebRequest.Get(serverUrl))
             {
                 yield return webRequest.SendWebRequest();
@@ -82,14 +82,11 @@ public class DataReceiver : MonoBehaviour
                 {
                     // Parse updated JSON data
                     string json = webRequest.downloadHandler.text;
-                    Debug.Log(json);
                     UpdateObjects(json);
                 }
             }
             yield return new WaitForSeconds(0.3f);
-
         }
-
     }
 
     void UpdateObjects(string jsonData)
@@ -100,7 +97,7 @@ public class DataReceiver : MonoBehaviour
         foreach (var agentData in data.agent_data)
         {
             int agentID = agentData.id;
-            Vector2 newPosition = new Vector2(agentData.position[0], agentData.position[1]);
+            Vector2Int newPosition = new Vector2Int(agentData.position[0], agentData.position[1]);
             bool hasFood = agentData.has_food;
 
             GameObject agentObject = agentObjects.Find(agent => agent.GetComponent<AgentController>().id == agentID);
@@ -109,7 +106,7 @@ public class DataReceiver : MonoBehaviour
             {
                 // Update the agent position and properties
                 AgentController agentController = agentObject.GetComponent<AgentController>();
-                agentController.id = agentID; // Ensure the ID is set (this might not be necessary if it doesn't change)
+                agentController.id = agentID;
                 agentController.Move(newPosition);
             }
             else
@@ -121,40 +118,41 @@ public class DataReceiver : MonoBehaviour
                 agentObjects.Add(newAgent);
             }
         }
-       /* foreach (var agentData in data.agent_data)
-        {   
 
-            int agentID = agentData.id;
-            Vector2 newPosition = new Vector2(agentData.position.x, agentData.position.y); // Set z-coordinate to 0
-            bool hasFood = agentData.has_food;
-
-            GameObject agentObject = agentObjects.Find(agent => agent.GetComponent<AgentScript>().AgentID == agentID);
-            if (agentObject != null)
-            {
-                // Update the agent position and properties
-                AgentScript agentScript = agentObject.GetComponent<AgentScript>();
-                agentScript.SetAgentProperties(agentID, newPosition, hasFood);
-                agentScript.MoveTo(newPosition); // Move the agent to the new position
-            }
-            else
-            {
-                Debug.LogError("Agent object not found for ID: " + agentID);
-            }
-        }*/
-   
-
-        if (!depositCreated)  {
-                InstantiateDeposit(data.deposit_position);
-                depositCreated = true;
+        if (!depositCreated)
+        {
+            InstantiateDeposit(data.deposit_position);
+            depositCreated = true;
         }
 
-
-
-
+        foreach (var foodData in data.food_positions)
+        {
+            
+            Vector2Int foodPosition = new Vector2Int(foodData.position[0], foodData.position[1]);
+            UpdateFoodPosition(foodPosition);
+        }
     }
+
+    void UpdateFoodPosition(Vector2Int position)
+    {
+        // Check if food exists at the given position
+        if (foodInstances.TryGetValue(position, out GameObject foodObject))
+        {
+            // Food exists, update its position
+            foodObject.transform.position = new Vector3(position[0], 0, position[1]);
+        }
+        else
+        {
+            // Food doesn't exist, instantiate a new one
+            GameObject newFood = Instantiate(foodPrefab, new Vector3(position[0], 0, position[1]), Quaternion.identity);
+            foodObjects.Add(newFood);
+            foodInstances[position] = newFood;
+        }
+    }
+
     void InstantiateDeposit(int[] depositPosition)
     {
-        Vector3 position3D = new Vector3(depositPosition[0], 0, depositPosition[1]);
-        Instantiate(depositPrefab, position3D, Quaternion.identity);
+        Vector2Int position = new Vector2Int(depositPosition[0], depositPosition[1]);
+        Instantiate(depositPrefab, new Vector3(position.x, 0, position.y), Quaternion.identity);
     }
 }
