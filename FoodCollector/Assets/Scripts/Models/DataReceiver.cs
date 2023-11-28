@@ -36,29 +36,43 @@ public class DataReceiver : MonoBehaviour
 
     void Start()
     {
-        // Create 5 agents with unique IDs
+        StartCoroutine(CreateAgentsWithDelay());
+    }
+
+     IEnumerator CreateAgentsWithDelay()
+    {
         for (int i = 0; i < 5; i++)
         {
             CreateAgent(i);
+
+            // Esperar un breve momento antes de crear el siguiente agente
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
     void CreateAgent(int id)
     {
-        Vector3 position = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), 0f); // Random initial position
-        GameObject agentObject = Instantiate(agentPrefab, position, Quaternion.identity);
-        agentObjects.Add(agentObject);
 
-        // Set unique ID and other properties
-        AgentScript agentScript = agentObject.GetComponent<AgentScript>();
-        if (agentScript != null)
-        {
-            agentScript.SetAgentProperties(id, position, false); // Set initial properties
-        }
-        else
-        {
-            Debug.LogError("AgentScript component not found on agentPrefab.");
-        }
+         // Usar el tiempo actual como semilla para el generador de números aleatorios
+    int seed = (int)System.DateTime.Now.Ticks + id;
+    Debug.Log("Semilla para agente " + id + ": " + seed);
+
+    System.Random random = new System.Random(seed);
+
+    Vector3 position = new Vector3((float)random.NextDouble() * 10 - 5, (float)random.NextDouble() * 10 - 5, 0f);
+    GameObject agentObject = Instantiate(agentPrefab, position, Quaternion.identity);
+    agentObjects.Add(agentObject);
+
+    // Set unique ID and other properties
+    AgentScript agentScript = agentObject.GetComponent<AgentScript>();
+    if (agentScript != null)
+    {
+        agentScript.SetAgentProperties(id, position, false); // Set initial properties
+    }
+    else
+    {
+        Debug.LogError("AgentScript component not found on agentPrefab.");
+    }
     }
 
     void Update()
