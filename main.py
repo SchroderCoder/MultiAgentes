@@ -2,15 +2,27 @@
 # Carlos Adrián García Estrada A01707503
 # Iván Ricardo Paredes Avilez A01705083
 # Francisco Couttolenc Ortíz A01754959
-# Fecha de entrega: 19 de noviembre de 2023
+# Fecha de entrega: 29 de noviembre de 2023
 
 #  Situación: 
 
-    El reto consiste en desarrollar un sistema multiagente para resolver una tarea cooperativa en un entorno 20x20 dinámicamente cambiante. El entorno del sistema multiagente es un mundo similar a una cuadrícula donde los agentes pueden moverse de su posición a una celda vecina si ya no hay ningún agente en esa ranura. En este entorno, la comida puede aparecer en cualquier celda menos en una. La celda especial, en la que no puede aparecer comida, se considera un depósito donde los agentes pueden traer y almacenar su comida. Un agente puede sólo puede saber si hay comida en una celda, si está visitándola. Inicialmente, la comida se coloca en algunas celdas aleatorias. Durante la ejecución, puede aparecer comida adicional dinámicamente en celdas seleccionadas al azar, excepto en la celda del depósito. Los agentes pueden tener/desempeñar diferentes roles (como explorador o recolector), comunicarse y cooperar para encontrar y recolectar alimentos de manera eficiente y efectiva.
+    El reto consiste en desarrollar un sistema multiagente para resolver una tarea cooperativa en un entorno 20x20 dinámicamente cambiante. 
+    El entorno del sistema multiagente es un mundo similar a una cuadrícula donde los agentes pueden moverse de su posición a una celda vecina 
+    si ya no hay ningún agente en esa ranura. En este entorno, la comida puede aparecer en cualquier celda menos en una. La celda especial,
+    en la que no puede aparecer comida, se considera un depósito donde los agentes pueden traer y almacenar su comida. 
+    Un agente puede sólo puede saber si hay comida en una celda, si está visitándola. Inicialmente, la comida se coloca en algunas celdas aleatorias. 
+    Durante la ejecución, puede aparecer comida adicional dinámicamente en celdas seleccionadas al azar, excepto en la celda del depósito. 
+    Los agentes pueden tener/desempeñar diferentes roles (como explorador o recolector), comunicarse y cooperar para encontrar y recolectar alimentos de manera eficiente y efectiva.
 
 # Solución: 
  
-    Se creo un sistema multiagente donde en cada paso los agentes siempre revisarán sus alrededores e identificarán si hay celdas vacías, celdas con comida y el depósito. El modelo actualizará las celdas de comida y depostio cada vez que un agente identifiqué celdas nuevas con comida. El comportamiento del agente dependerá si tiene comida. Si el agente tiene comdia evaluará su posición y la del deposito decidiendo dirigirse o no dependiendo si las coordenadas ya han sido encontradas, de otro modo el agente se moverá de manera aleatoria. En el caso de que el agente no tenga comida, revisará si la celda que se encuentra actualmente o la de sus alrededores tiene comida la cual tomará en ese turno o el siguiente; también revisará si hay coordendas de comida encontrada por el u otros agentes y se dirigirá a aquella más cercana. En caso de que ninguna de estas condiciones qse cumpla entonces el agnete se moverá aleatoriamente. El agente colocará comida si y solo si se encuentra en la celda del deposito y tomará comida si y solo si la celda en la que se encuentra tiene comida y no está marcada como depósito. Para el movimiento dirigido por coordenadas el agente usará la distancia manhattan para moverse de manera directa al objetivo (depósito o comida)
+    Se creo un sistema multiagente donde en cada paso los agentes siempre revisarán sus alrededores e identificarán si hay celdas vacías, celdas con comida y el depósito. 
+    El modelo actualizará las celdas de comida y depostio cada vez que un agente identifiqué celdas nuevas con comida. 
+    El comportamiento del agente dependerá si tiene comida. Si el agente tiene comdia evaluará su posición y la del deposito decidiendo dirigirse o no dependiendo si las coordenadas ya han sido encontradas,
+    de otro modo el agente se moverá de manera aleatoria. En el caso de que el agente no tenga comida, revisará si la celda que se encuentra actualmente o la de sus alrededores tiene comida la cual tomará en ese turno o el siguiente;
+    también revisará si hay coordendas de comida encontrada por el u otros agentes y se dirigirá a aquella más cercana. En caso de que ninguna de estas condiciones qse cumpla entonces el agnete se moverá aleatoriamente. 
+    El agente colocará comida si y solo si se encuentra en la celda del deposito y tomará comida si y solo si la celda en la que se encuentra tiene comida y no está marcada como depósito. 
+    Para el movimiento dirigido por coordenadas el agente usará la distancia manhattan para moverse de manera directa al objetivo (depósito o comida)
 
 # Como eficientar el algoritmo 
 
@@ -387,5 +399,5 @@ while model.running:
 
 # Imprimimos el tiempo que le tomó correr al modelo.
 print('Numero de pasos:', step_counter)
-print('Tiempo de ejecución:', str(datetime.timedelta(seconds=(time.time() - start_time))))
+print('Tiempo de ejecucion:', str(datetime.timedelta(seconds=(time.time() - start_time))))
 
