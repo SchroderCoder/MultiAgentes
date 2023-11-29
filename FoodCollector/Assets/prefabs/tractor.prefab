@@ -342,6 +342,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5974219304755848164}
   - component: {fileID: 6572853085910699079}
+  - component: {fileID: 2475908222018809949}
   m_Layer: 0
   m_Name: tractor
   m_TagString: Untagged
@@ -383,7 +384,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
-  speed: 5
+  has_food: 0
+--- !u!135 &2475908222018809949
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3969180757281214735}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.0818958
+  m_Center: {x: 0, y: 0.5818971, z: 0}
 --- !u!1 &4041273137432677866
 GameObject:
   m_ObjectHideFlags: 0

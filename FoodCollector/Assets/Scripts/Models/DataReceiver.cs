@@ -85,14 +85,14 @@ public class DataReceiver : MonoBehaviour
                     UpdateObjects(json);
                 }
             }
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
     void UpdateObjects(string jsonData)
     {
         SimulationData data = JsonUtility.FromJson<SimulationData>(jsonData);
-        Debug.Log("Received JSON: " + jsonData);
+        //Debug.Log("Received JSON: " + jsonData);
 
         foreach (var agentData in data.agent_data)
         {
@@ -108,6 +108,7 @@ public class DataReceiver : MonoBehaviour
                 AgentController agentController = agentObject.GetComponent<AgentController>();
                 agentController.id = agentID;
                 agentController.Move(newPosition);
+                agentController.SetHasFood(hasFood);
             }
             else
             {
@@ -115,6 +116,8 @@ public class DataReceiver : MonoBehaviour
                 GameObject newAgent = Instantiate(agentPrefab, new Vector3(newPosition.x, 0, newPosition.y), Quaternion.identity);
                 AgentController newAgentController = newAgent.GetComponent<AgentController>();
                 newAgentController.id = agentID;
+                newAgentController.Move(newPosition);
+                newAgentController.SetHasFood(hasFood);
                 agentObjects.Add(newAgent);
             }
         }
@@ -127,7 +130,6 @@ public class DataReceiver : MonoBehaviour
 
         foreach (var foodData in data.food_positions)
         {
-            
             Vector2Int foodPosition = new Vector2Int(foodData.position[0], foodData.position[1]);
             UpdateFoodPosition(foodPosition);
         }
