@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7a771f6c86e2e4df892b2eac3b1cf808
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 235885
+  packageName: Farm Assets
+  packageVersion: 1.0
+  assetPath: Assets/FarmAssets/Texture/WaterTank.mat
+  uploadId: 540130
